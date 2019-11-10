@@ -1,0 +1,19 @@
+﻿  Source.cpp
+C:\Users\Longday\source\repos\3laba\Source.cpp(9,20): warning C4018:  <: несоответствие типов со знаком и без знака
+C:\Users\Longday\source\repos\3laba\Source.cpp(11,21): warning C4018:  <: несоответствие типов со знаком и без знака
+C:\Users\Longday\source\repos\3laba\Source.cpp(22,20): warning C4018:  <: несоответствие типов со знаком и без знака
+C:\Users\Longday\source\repos\3laba\Source.cpp(38,20): warning C4018:  <: несоответствие типов со знаком и без знака
+C:\Users\Longday\source\repos\3laba\Source.cpp(41,21): warning C4018:  <: несоответствие типов со знаком и без знака
+C:\Users\Longday\source\repos\3laba\Source.cpp(56,20): warning C4018:  <: несоответствие типов со знаком и без знака
+C:\Users\Longday\source\repos\3laba\Source.cpp(59,21): warning C4018:  <: несоответствие типов со знаком и без знака
+C:\Users\Longday\source\repos\3laba\Source.cpp(79,20): warning C4018:  <: несоответствие типов со знаком и без знака
+C:\Users\Longday\source\repos\3laba\Source.cpp(163,12): warning C4244:  аргумент: преобразование "time_t" в "unsigned int", возможна потеря данных
+C:\Users\Longday\source\repos\3laba\Source.cpp(165,20): warning C4018:  <: несоответствие типов со знаком и без знака
+C:\Users\Longday\source\repos\3laba\Source.cpp(168,21): warning C4018:  <: несоответствие типов со знаком и без знака
+C:\Users\Longday\source\repos\3laba\Source.cpp(179,20): warning C4018:  <: несоответствие типов со знаком и без знака
+C:\Users\Longday\source\repos\3laba\Source.cpp(181,21): warning C4018:  <: несоответствие типов со знаком и без знака
+C:\Users\Longday\source\repos\3laba\Source.cpp(195,20): warning C4018:  <: несоответствие типов со знаком и без знака
+C:\Users\Longday\source\repos\3laba\Source.cpp(198,21): warning C4018:  <: несоответствие типов со знаком и без знака
+C:\Users\Longday\source\repos\3laba\Source.cpp(151,6): warning C4101:  temp: неиспользованная локальная переменная
+C:\Users\Longday\source\repos\3laba\Source.cpp(92): warning C4715:  magic_matrix: значение возвращается не при всех путях выполнения
+  3laba.vcxproj -> C:\Users\Longday\source\repos\3laba\Debug\3laba.exe
