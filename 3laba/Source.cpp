@@ -2,6 +2,7 @@
 #include <iostream>
 #include <vector>
 #include <ctime>
+#include <fstream>
 
 using namespace std;
 
@@ -16,6 +17,27 @@ void print_Matrix(vector<vector<int> > matrix, unsigned int row, unsigned int co
 		cout << "\n";
 	}
 	cout << "\n";
+}
+unsigned int checkdigit()
+{
+	unsigned int digit;
+	while (true)
+	{
+		// вводим число, которое хотим представить в двоичной форме
+			cin >> digit; // число целое
+
+		if (cin.fail()) // ecли предыдущее извелечение оказлось неудачным,
+		{
+			cin.clear(); // то возвращаем cin в обычный режим работы
+			cin.ignore(32767, '\n'); // и удаляем из буфера значения предыдущего ввода 
+			cout << "Недопустимое заданное число. Введите число правильно" << '\n';
+		}
+		else
+		{
+			cin.ignore(32767, '\n'); // удаляем из буфера значения предыдущего ввода 
+			return digit;
+		}
+	}
 }
 void change_rows(vector<vector<int> >& tab_1, unsigned int first_row, unsigned int second_row, unsigned int col)
 {
@@ -89,15 +111,6 @@ int magic_matrix(vector<vector<int> >& tab_2, unsigned int mat_n)
 	if (summ_row != summ_d_main)
 	{
 		return -1;
-	}
-}
-// Функция вывода матрицы
-void PrintMatr(int** mas, int m) {
-	int i, j;
-	for (i = 0; i < m; i++) {
-		for (j = 0; j < m; j++)
-			cout << mas[i][j] << " ";
-		cout << endl;
 	}
 }
 // Получение матрицы без i-й строки и j-го столбца
@@ -207,12 +220,88 @@ void fill_mat(vector<vector<int> >& tab_2, unsigned int mat_n)
 		tab_2[i].resize(mat_n);
 		for (int j = 0; j < mat_n; j++) {
 			cout << "mas[" << i << "][" << j << "]= ";
-			cin >> tab_2[i][j];
+			tab_2[i][j] = checkdigit();
 		}
 	}
 }
-void choosefill(vector<vector<int> >& tab_2, unsigned int mat_n)
+int fill_mat_via_file(vector<vector<int> >& tab_2)
 {
+	ifstream in("input.txt");
+
+	if (in.is_open())
+	{
+		//Если открытие файла прошло успешно
+
+		//Вначале посчитаем сколько чисел в файле
+		int count = 0;// число чисел в файле
+		int temp;//Временная переменная
+
+		while (!in.eof())// пробегаем пока не встретим конец файла eof
+		{
+			in >> temp;//в пустоту считываем из файла числа
+			count++;// увеличиваем счетчик числа чисел
+		}
+
+		//Число чисел посчитано, теперь нам нужно понять сколько
+		//чисел в одной строке
+		//Для этого посчитаем число пробелов до знака перевода на новую строку 
+
+		//Вначале переведем каретку в потоке в начало файла
+		in.seekg(0, ios::beg);
+		in.clear();
+
+		//Число пробелов в первой строчке вначале равно 0
+		int count_space = 0;
+		char symbol;
+		while (!in.eof())//на всякий случай цикл ограничиваем концом файла
+		{
+			//теперь нам нужно считывать не числа, а посимвольно считывать данные
+			in.get(symbol);//считали текущий символ
+			if (symbol == ' ') count_space++;//Если это пробел, то число пробелов увеличиваем
+			if (symbol == '\n') break;//Если дошли до конца строки, то выходим из цикла
+		}
+		//cout << count_space << endl;
+
+		//Опять переходим в потоке в начало файла
+		in.seekg(0, ios::beg);
+		in.clear();
+
+		//Теперь мы знаем сколько чисел в файле и сколько пробелов в первой строке.
+		//Теперь можем считать матрицу.
+
+		int n = count / (count_space + 1);//число строк
+		int m = count_space + 1;//число столбцов на единицу больше числа пробелов
+
+		tab_2.resize(m);
+		for (int i = 0; i < n; i++) tab_2[i].resize(m);
+
+		//Считаем матрицу из файла
+		for (int i = 0; i < n; i++)
+			for (int j = 0; j < m; j++)
+				in >> tab_2[i][j];
+
+		//Выведем матрицу
+		for (int i = 0; i < n; i++)
+		{
+			for (int j = 0; j < m; j++)
+				cout << tab_2[i][j] << "\t";
+			cout << "\n";
+		}
+
+		in.close();//под конец закроем файла
+		return m;
+	}
+	else
+	{
+		//Если открытие файла прошло не успешно
+		cout << "Файл не найден.";
+	}
+	
+}
+int choosefill(vector<vector<int> >& tab_2)
+{
+	int m;
+	unsigned int mat_n;
 	char value[256];
 	cin >> value;
 	if (strlen(value) == 1)
@@ -220,26 +309,40 @@ void choosefill(vector<vector<int> >& tab_2, unsigned int mat_n)
 		switch (value[0])
 		{
 		case '1':
+			cout << "Введите размерность квадратной матрицы: ";
+			mat_n = checkdigit();
 			fill_random_mat(tab_2, mat_n);
+			return mat_n;
 			break;
 
 		case '2':
+			cout << "Введите размерность квадратной матрицы: ";
+			mat_n = checkdigit();
 			fill_mat(tab_2, mat_n);
+			return mat_n;
+			break;
+		case '3':
+			m = fill_mat_via_file(tab_2);
+			return m;
 			break;
 		default:
 			cout << "Число введено неверно. Введите заново" << endl;
-			choosefill(tab_2, mat_n);
+			choosefill(tab_2);
 		}
 	}
 	else
 	{
 		cout << "Необходимо ввести один символ. Попробуйте ввести заново" << endl;
-		choosefill(tab_2, mat_n);
+		choosefill(tab_2);
 	}
 }
 void transp_mat(vector<vector<int> >& mat, vector<vector<int> >& tab_2, unsigned int mat_n)
 {
 	mat.resize(mat_n);
+	for (int i = 0; i < mat_n; i++)
+	{
+		mat[i].resize(mat_n);
+	}
 	for (int i = 0; i < mat_n; i++)
 	{
 		for (int j = 0; j < mat_n; j++)
@@ -265,7 +368,7 @@ int chooseMatrix(vector<vector<int> >& mat, vector<vector<int> >& tab_2, unsigne
 			break;
 		case '2':
 			cout << "Введите размерность квадратной матрицы: ";
-			cin >> m;
+			m = checkdigit();
 			fill_random_mat(tab_2, m);
 			transp_mat(mat, tab_2, m);
 			cout << "--------------Матрица--------------" << endl;
@@ -274,13 +377,17 @@ int chooseMatrix(vector<vector<int> >& mat, vector<vector<int> >& tab_2, unsigne
 			break;
 		case '3':
 			cout << "Введите размерность квадратной матрицы: ";
-			cin >> m;
+			m = checkdigit();
 			fill_mat(tab_2, m);
 			transp_mat(mat, tab_2, m);
 			cout << "--------------Матрица--------------" << endl;
 			print_Matrix(mat, m, m);
 			return m;
 			break;
+		case '4':
+			m = fill_mat_via_file(tab_2);
+			transp_mat(mat, tab_2, m);
+			return m;
 		default:
 			cout << "Число введено неверно. Введите заново" << endl;
 			chooseMatrix(mat, tab_2, mat_n);
@@ -303,10 +410,12 @@ int main()
 	int det; // переменная для определителя
 	int rang; // переменная для ранга
 
-	cout << endl << "Введите количество строк в матрице: ";
-	cin >> row;
+	cout << "ЛАБОРАТОРНАЯ РАБОТА № 3 - РАБОТА С МАТРИЦАМИ" << endl << endl;
+	cout << "Создание матрицы" << endl;
+	cout << endl << "Введите количество строк в матрице (арабски): ";
+	row = checkdigit();
 	cout << "Введите количество столбцов в матрице: ";
-	cin >> col;
+	col = checkdigit();
 	cout << "\n";
 
 	vector<vector<int> > tab_1(row); // создаем двумерный массив
@@ -344,15 +453,14 @@ int main()
 	// 2 задание - определить, является ли матрица магическим квадратом ( сумма значений элементов по каждой строке = сумма значений элементов по каждому столбцу = сумма значений элементов по диагналям)
 	// создадим квадратную матрицу
 	cout << endl << "---------Задание 2 - определить, является ли матрица магическим квадратом ( сумма значений элементов по каждой строке = сумма значений элементов по каждому столбцу = сумма значений элементов по диагналям)---------" << endl;
-	cout << "Введите размерность квадратной матрицы: " ;
-	cin >> mat_n;
-	vector<vector<int> > tab_2(mat_n); // создаем двумерный массив N-го порядка
+
+	vector<vector<int> > tab_2; // создаем двумерный массив N-го порядка
 	cout << "Как вы хотите заполнить данную квадратную матрицу:" << endl;
 	cout << "1 - Значения элементов будут заданы рандомно (кратны 20)" << endl;
 	cout << "2 - Самостоятельно заполнить значения элементов матрицы" << endl;
 	cout << "3 - Загрузить матрицу с помощью текстового файла" << endl;
 
-	choosefill(tab_2, mat_n);
+	mat_n = choosefill(tab_2);
 	cout << "Созданная квадратная матрица" << endl << endl;
 
 	// магический квадрат для проверки значений
@@ -384,8 +492,7 @@ int main()
 	cout << "2 - Новую созданную матрицу (элементы будут созданы рандомно (кратны 20))" << endl;
 	cout << "3 - Ввести элементы матрицы самостоятельно" << endl;
 	cout << "4 - Загрузить матрицу с помощью текстового файла" << endl;
-	vector<vector<int> > mat(mat_n);
-	cin >> m;
+	vector<vector<int> > mat;
 	m = chooseMatrix(mat, tab_2, mat_n);
 	
 
