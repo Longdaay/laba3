@@ -7,6 +7,7 @@
 #include <Windows.h> // для вывода цветом в консоли 
 
 using namespace std;
+const int NotUsed = system("color 70");
 
 void SetColor(int text, int bg) //Функция смены цвета, взятая из Интернета
 {
@@ -33,9 +34,9 @@ void print_Matrix_first(vector<vector<int> > matrix, unsigned int row, unsigned 
 		{
 			if (j == 0)
 			{
-				SetColor(5, 0);
+				SetColor(5, 7);
 				cout << matrix[i][j] << "\t"; // выводим табуляцией
-				SetColor(7, 0);
+				SetColor(0, 7);
 			}
 			else
 				cout << matrix[i][j] << "\t"; // выводим табуляцией
@@ -234,9 +235,7 @@ int rang_mat(vector<vector<int> > mat, int i, int j, int par) // функция для про
 		}
 		q++; // прибавляем 1
 	}
-
 	return r;
-
 }
 void fill_random_mat(vector<vector<int> >& tab_2, unsigned int row, unsigned int col) // функция для рандомного заполнения матрицы в зависимости от его размерности
 {
@@ -329,7 +328,7 @@ int fill_mat_via_file(vector<vector<int> >& tab_2)
 	}
 	
 }
-int choosefill(vector<vector<int> >& tab_2) // функция выбора заполнения массива
+int choosefill(vector<vector<int> >& tab_2) // функция выбора заполнения матрицы
 {
 	int m;
 	unsigned int mat_n;
@@ -418,6 +417,8 @@ int chooseMatrix(vector<vector<int> >& mat, vector<vector<int> >& tab_2, unsigne
 		case '4': // заполнение матрицы из текстового файла
 			m = fill_mat_via_file(tab_2);
 			transp_mat(mat, tab_2, m);
+			cout << "--------------Матрица--------------" << endl;
+			print_Matrix(mat, m, m);
 			return m;
 		default: // если число не подходит ни к одному из
 			cout << "Число введено неверно. Введите заново" << endl;
@@ -562,12 +563,14 @@ int main()
 			cout << "Заданная матрица является магическим квадратом! Поздравляю" << endl << endl;
 
 		// Определитель и ранг матрицы
-		cout << "---------Задание 2 - Найти определитель матрицы ---------" << endl;
+		cout << "---------Задание 3 - Найти определитель матрицы ---------" << endl;
 		cout << "Какую матрицу Вы хотите использовать:" << endl;
 		cout << "1 - Созданную матрицу в задании 2" << endl;
 		cout << "2 - Новую созданную матрицу (элементы будут созданы рандомно (кратны 20))" << endl;
 		cout << "3 - Ввести элементы матрицы самостоятельно" << endl;
-		cout << "4 - Загрузить матрицу с помощью текстового файла" << endl;
+		cout << "4 - Загрузить матрицу с помощью текстового файла" << endl << endl;
+
+		cout << "Введите номер одного из вариантов: ";
 		m = chooseMatrix(mat, tab_2, mat_n);
 
 		cout << "Необходимо ли Вам показывать расчет определителя и ранга?(y/n) ";
